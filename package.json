@@ -1,0 +1,64 @@
+{
+  "name": "react-native-d3-charts",
+  "version": "0.0.1",
+  "description": "Cross platform react native charting library built with d3js and react-native-svg",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/onemolegames/react-native-d3-charts.git"
+  },
+  "main": "src/index.js",
+  "scripts": {
+    "start": "node_modules/react-native/packager/packager.sh",
+    "lint": "eslint --ext .js,.jsx src",
+    "test": "jest"
+  },
+  "keywords": [
+    "react-native",
+    "react-native-svg",
+    "d3js",
+    "react-native-chart",
+    "ios",
+    "android"
+  ],
+  "author": {
+    "name": "Semir Turgay",
+    "email": "semir.turgayh@gmail.com",
+    "url": "https://github.com/semirturgay"
+  },
+  "license": "MIT",
+  "maintainers": [
+    {
+      "name": "semirturgay",
+      "email": "semir.turgay@gmail.com"
+    },
+    {
+      "name": "yasemincidem",
+      "email": "yasemincidem@gmail.com"
+    }
+  ],
+  "dependencies": {
+    "babel-polyfill": "^6.23.0",
+    "d3-scale": "^1.0.6",
+    "d3-shape": "^1.2.0",
+    "moment": "^2.19.2",
+    "react-native-svg": "~5.5.1",
+    "prop-types": "latest"
+  },
+  "devDependencies": {
+    "babel-jest": "*",
+    "babel-preset-react-native": "^1.9.0",
+    "diff": "^3.1.0",
+    "jest": "*",
+    "jest-react-native": "*",
+    "react": "16.0.0",
+    "react-dom": "16.0.0",
+    "react-native": "0.50.3",
+    "react-test-renderer": "16.0.0"
+  },
+  "jest": {
+    "preset": "react-native",
+    "modulePathIgnorePatterns": [
+      "<rootDir>/example"
+    ]
+  }
+}

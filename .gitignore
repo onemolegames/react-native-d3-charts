@@ -1,13 +1,32 @@
-.*
-!/.gitignore
-target
-build
-gradle.properties
-proguard-rules.pro
-BUCK
-keystores
-local.properties
-Pods
-Podfile.lock
-Example.xcworkspace
+# Logs
+logs
+*.log
+
+# Runtime data
+pids
+*.pid
+*.seed
+
+# Coverage tools
+lib-cov
+coverage
+coverage.html
+.cover*
+
+# Dependency directory
 node_modules
+
+# Example build directory
+example/dist
+
+# Editor and other tmp files
+*.swp
+*.un~
+*.iml
+*.ipr
+*.iws
+*.sublime-*
+.idea/
+*.DS_Store
+
+util/watchman-update-example-src/watchman-update-example-src.sh
