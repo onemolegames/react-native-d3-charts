@@ -1,19 +1,23 @@
 import React from "react";
-import Svg, {Defs, G, LinearGradient, Path, Stop} from "react-native-svg";
+import PropTypes from "prop-types";
+import Svg, {G, LinearGradient, Path, Defs, Stop, Text} from "react-native-svg";
 import * as scale from "d3-scale";
 import * as shape from "d3-shape";
-import PropTypes from "prop-types";
+
 const d3 = {
   scale,
   shape,
 };
-const {number, bool, string, func} = PropTypes;
+const {number, bool, string} = PropTypes;
 const object = PropTypes.shape;
 
 const CircularProgressBar = (props) => {
 
   const {
     text,
+    fontSize,
+    fontFamily,
+    color,
   } = props.label;
 
   const {width, height} = props.size;
@@ -44,7 +48,7 @@ const CircularProgressBar = (props) => {
     .range([0, 2 * Math.PI]);
   const scaledValue = scaleValue(value);
 
-  const formattedLabel = (text) ? text.replace(/&value/ig, value) : "";
+  const formattedLabel = text.replace(/&value/ig, value);
 
   const valueArc = d3.shape.arc()
     .innerRadius(radius)
@@ -71,7 +75,7 @@ const CircularProgressBar = (props) => {
       stroke={dashedArcColor}
       strokeWidth={dashedArcWidth}
       strokeOpacity={dashedArcOpacity}
-      strokeDasharray={[1, 3]}
+      strokeDasharray={[1,3]}
       d={dashedArcLines()}/>);
   }
 
@@ -83,7 +87,7 @@ const CircularProgressBar = (props) => {
           <Stop offset="100%" stopColor={valueArcStopColor} stopOpacity="1"/>
         </LinearGradient>
       </Defs>
-      <G x={width / 2} y={height / 2} width="100%" height="100%">
+      <G x={width/2} y={height/2} width="100%" height="100%">
         {dashedArc}
         <Path stroke={baseArcColor}
               strokeWidth={baseArcWidth}
@@ -98,7 +102,14 @@ const CircularProgressBar = (props) => {
           strokeLinejoin="round"
           d={valueArc()}/>
       </G>
-      {props.renderLabel(width, height, thickestArc, value)}
+      <Text x={width / 2 - 5} y={(height / 2) + (2 * thickestArc) - fontSize}
+            textAnchor="middle"
+            fontSize={fontSize}
+            fontFamily={fontFamily}
+            stroke={color}
+            fill={color}>
+        {formattedLabel}
+      </Text>
     </Svg>
   );
 };
@@ -130,7 +141,6 @@ CircularProgressBar.propTypes = {
     arcWidth: number,
     arcColor: string,
   }),
-  renderLabel: func,
   label: object({
     text: string,
     fontSize: number,
@@ -141,8 +151,8 @@ CircularProgressBar.propTypes = {
 
 CircularProgressBar.defaultProps = {
   size: {
-    width: 200,
-    height: 300
+    width: 320,
+    height: 320
   },
   value: 47,
   showDashedArc: true,
@@ -153,13 +163,13 @@ CircularProgressBar.defaultProps = {
   valueArc: {
     arcWidth: 8,
     arcOpacity: 1,
-    arcStartColor: "#0DF6CE",
-    arcStopColor: "#E1E621"
+    arcStartColor: "#f6eb12",
+    arcStopColor: "#1a4de6"
   },
   baseArc: {
     arcWidth: 3,
     arcOpacity: 0.1,
-    arcColor: "#F5F5F5"
+    arcColor: "#53c4f5"
   },
   dashedArc: {
     arcOpacity: 0.3,
