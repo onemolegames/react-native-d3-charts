@@ -1,5 +1,5 @@
 import React from "react";
-import Svg, {G, Path, Use, Line, Text} from "react-native-svg";
+import Svg, {G, Line, Path, Text} from "react-native-svg";
 import * as scale from "d3-scale";
 import * as shape from "d3-shape";
 import * as array from "d3-array";
@@ -17,10 +17,16 @@ const object = PropTypes.shape;
 const LineChart = (props) => {
   const {size, series, xAxis, yAxis, margin} = props;
 
-  const y = scale.scaleLinear().domain([0, array.max(series[0].data)])
+  let allData = [];
+  series.forEach(s => {allData = allData.concat(s.data)});
+
+  const maxInSeries = array.max(allData);
+  const minInSeries = array.min(allData);
+
+  const y = scale.scaleLinear().domain([minInSeries, maxInSeries])
     .range([margin, size.height - margin]);
 
-  const x = scale.scaleLinear().domain([0, series[0].data.length])
+  const x = scale.scaleLinear().domain([0, allData.length])
     .range([margin, size.width - margin]);
 
   const line = d3.shape.line()
@@ -47,33 +53,30 @@ const LineChart = (props) => {
     return (
       <G key={index}>
         <Text x={-10} y={-1 * y(tick)} dy="-5">{tick}</Text>
-        <Line x1={x(-0.05)} x2={0} y1={-1 * y(tick)} y2={-1 * y(tick)} stroke="red" strokeWidth="2"/>
       </G>
     );
   });
 
-  const xLabels = x.ticks(xAxis.ticks).map((tick, index) => {
+  const xLabels = x.ticks(xAxis.ticks).filter((t) => t !== 0).map((tick, index) => {
     return (
       <G key={index}>
-        <Text x={-10} y={-1 * x(tick)} dy="-5">{tick}</Text>
-        <Line x1={x(-0.05)} x2={-1*x(tick)} y1={0} y2={0} stroke="red" strokeWidth="2"/>
+        <Text x={x(tick)} y={-1} dy="-20">{tick}</Text>
       </G>
     );
   });
 
   return (
-    <Svg width={size.width} height={size.height} fill="none">
+    <Svg width={size.width + 20} height={size.height + 20} fill="none">
       <G x="10" y={size.height}>
         {lines}
         <Line x1={x(0)} x2={x(size.width)} y1={-1 * y(0)} y2={-1 * y(0)} stroke="red"
               strokeWidth="2"/>
-        <Line x1={x(0)} x2={x(0)} y1={-1*y(0)} y2={-1 * y(array.max(series[0].data))}
+        <Line x1={x(0)} x2={x(0)} y1={-1 * y(minInSeries)} y2={-1 * y(maxInSeries)}
               stroke="red"
               strokeWidth="2"/>
         {yLabels}
-
+        {xLabels}
       </G>
-      <Use href={"#10"}/>
     </Svg>
   );
 };
@@ -105,7 +108,7 @@ LineChart.propTypes = {
 LineChart.defaultProps = {
   size: {
     width: 300,
-    height: 150
+    height: 160
   },
   xAxis: {
     type: "Date",
@@ -119,14 +122,14 @@ LineChart.defaultProps = {
   margin: 10,
   series: [
     {
-      data: [4, 7, 0, 4, 7, 0, 4, 7, 0, 4, 8, 4, 7],
+      data: [4, 7, 0, 4, 7, 0, 4, 7, 0, 4, 8, 4, 7, 29, 22,2,2,58],
       color: "#620b79",
       name: "Serie 0",
       width: 2,
       opacity: 0.4
     },
     {
-      data: [0, 6, 8, 2, 3, 5, 4, 7, 0, 4, 7, 4, 7],
+      data: [-10, 6, 8, 2, 3, 5, 4, 7, 0, 4, 7, 4, 7, 55,1,1,2],
       color: "#791a22",
       name: "Serie 0",
       width: 2,

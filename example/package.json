@@ -5,7 +5,8 @@
   "scripts": {
     "start": "node node_modules/react-native/local-cli/cli.js start",
     "test": "jest",
-    "sync-lib": "npm uninstall react-native-d3-charts && npm install react-native-d3-charts"
+    "sync-lib": "npm uninstall react-native-d3-charts && npm install react-native-d3-charts",
+    "sync-rnpc": "rm -rf ./node_modules/react-native-d3-charts; sane '/usr/bin/rsync -v -a --exclude .git --exclude example --exclude node_modules ../ ./node_modules/react-native-d3-charts/' .. --glob='{**/*.json,**/*.js}'"
   },
   "dependencies": {
     "react": "16.0.0",
@@ -16,7 +17,8 @@
     "babel-jest": "21.2.0",
     "babel-preset-react-native": "4.0.0",
     "jest": "21.2.1",
-    "react-test-renderer": "16.0.0"
+    "react-test-renderer": "16.0.0",
+    "sane": "^1.4.1"
   },
   "jest": {
     "preset": "react-native"
