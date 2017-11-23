@@ -4,14 +4,11 @@
   "private": true,
   "scripts": {
     "start": "node node_modules/react-native/local-cli/cli.js start",
-    "test": "jest",
-    "sync-lib": "npm uninstall react-native-d3-charts && npm install react-native-d3-charts",
-    "sync-rnpc": "rm -rf ./node_modules/react-native-d3-charts; sane '/usr/bin/rsync -v -a --exclude .git --exclude example --exclude node_modules ../ ./node_modules/react-native-d3-charts/' .. --glob='{**/*.json,**/*.js}'"
+    "test": "jest"
   },
   "dependencies": {
     "react": "16.0.0",
-    "react-native": "0.50.3",
-    "react-native-d3-charts": "file:../"
+    "react-native": "0.50.3"
   },
   "devDependencies": {
     "babel-jest": "21.2.0",

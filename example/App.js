@@ -6,7 +6,7 @@
 
 import React, {Component} from "react";
 import {StyleSheet, View} from "react-native";
-import {CircularProgressBar, PieChart, LineChart} from "react-native-d3-charts";
+import {CircularProgressBar, PieChart, LineChart} from "./src";
 
 
 export default class App extends Component {
