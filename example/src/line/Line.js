@@ -18,10 +18,12 @@ const LineChart = (props) => {
   const {size, series, xAxis, yAxis, margin} = props;
 
   let allData = [];
-  series.forEach(s => {allData = allData.concat(s.data)});
+  series.forEach(s => {
+    allData = allData.concat(s.data)
+  });
 
   const maxInSeries = array.max(allData);
-  const minInSeries = array.min(allData);
+  const minInSeries = array.min(allData) > 0 ? 0 : array.min(allData);
 
   const y = scale.scaleLinear().domain([minInSeries, maxInSeries])
     .range([margin, size.height - margin]);
@@ -52,7 +54,7 @@ const LineChart = (props) => {
   const yLabels = y.ticks(yAxis.ticks).map((tick, index) => {
     return (
       <G key={index}>
-        <Text x={-10} y={-1 * y(tick)} dy="-10" dx="-5">{tick}</Text>
+        <Text x={-10} y={-1 * y(tick)} dy="-5">{tick}</Text>
       </G>
     );
   });
@@ -67,9 +69,9 @@ const LineChart = (props) => {
 
   return (
     <Svg width={size.width + 20} height={size.height + 20} fill="none">
-      <G x="20" y={size.height}>
+      <G x="10" y={size.height}>
         {lines}
-        <Line x1={x(0)} x2={x(allData.length)} y1={-y(0)} y2={-y(0)} stroke="red"
+        <Line x1={x(0)} x2={x(size.width)} y1={-1 * y(0)} y2={-1 * y(0)} stroke="red"
               strokeWidth="2"/>
         <Line x1={x(0)} x2={x(0)} y1={-1 * y(minInSeries)} y2={-1 * y(maxInSeries)}
               stroke="red"
@@ -122,19 +124,12 @@ LineChart.defaultProps = {
   margin: 10,
   series: [
     {
-      data: [4, 7, 0, 4, 7, 0, 4],
+      data: [4, 1, 3],
       color: "#620b79",
       name: "Serie 0",
       width: 2,
       opacity: 0.4
-    },
-    {
-      data: [-10, 6, 8, 2, 3, 5, 14],
-      color: "#791a22",
-      name: "Serie 0",
-      width: 2,
-      opacity: 1
-    },
+    }
   ]
 };
 

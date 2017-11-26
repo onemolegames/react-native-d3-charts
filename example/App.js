@@ -5,24 +5,24 @@
  */
 
 import React, {Component} from "react";
-import {StyleSheet, View} from "react-native";
-import {CircularProgressBar, PieChart, LineChart} from "./src";
+import {StyleSheet, View,ScrollView} from "react-native";
+import {CircularProgressBar, LineChart, PieChart} from "./src";
 
 
 export default class App extends Component {
   render() {
     return (
-      <View style={styles.container}>
-
+      <ScrollView style={styles.container}>
+        <PieChart/>
         <LineChart />
-      </View>
+        <CircularProgressBar size={{width:200,height:200}}  />
+      </ScrollView>
     );
   }
 }
 
 const styles = StyleSheet.create({
-  container: {
-   },
+  container: {},
   welcome: {
     fontSize: 20,
     textAlign: 'center',

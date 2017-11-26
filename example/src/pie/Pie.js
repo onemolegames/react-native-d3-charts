@@ -162,7 +162,7 @@ PieChart.defaultProps = {
       startColor: "#56CDFD",
       endColor: "#2d4c64",
       label: {
-        text: "&value \n Red",
+        text: "&value \n Blue",
         color: "#ff6464",
         fontSize: 12,
         fontFamily: "Helvetica"
@@ -180,7 +180,7 @@ PieChart.defaultProps = {
       }
     },
     {
-      value: 7,
+      value: 17,
       startColor: "#4AF55D",
       endColor: "#1b5720",
       label: {
@@ -191,7 +191,7 @@ PieChart.defaultProps = {
       }
     },
     {
-      value: 2,
+      value: 12,
       startColor: "#1120f5",
       endColor: "#06230c",
       label: {
