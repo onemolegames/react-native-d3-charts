@@ -18,12 +18,10 @@ const LineChart = (props) => {
   const {size, series, xAxis, yAxis, margin} = props;
 
   let allData = [];
-  series.forEach(s => {
-    allData = allData.concat(s.data)
-  });
+  series.forEach(s => {allData = allData.concat(s.data)});
 
   const maxInSeries = array.max(allData);
-  const minInSeries = array.min(allData) > 0 ? 0 : array.min(allData);
+  const minInSeries = array.min(allData);
 
   const y = scale.scaleLinear().domain([minInSeries, maxInSeries])
     .range([margin, size.height - margin]);
@@ -124,12 +122,19 @@ LineChart.defaultProps = {
   margin: 10,
   series: [
     {
-      data: [4, 1, 3],
+      data: [4, 7, 0, 4, 7, 0, 4, 7, 0, 4, 8, 4, 7, 29, 22,2,2,58],
       color: "#620b79",
       name: "Serie 0",
       width: 2,
       opacity: 0.4
-    }
+    },
+    {
+      data: [-10, 6, 8, 2, 3, 5, 4, 7, 0, 4, 7, 4, 7, 55,1,1,2],
+      color: "#791a22",
+      name: "Serie 0",
+      width: 2,
+      opacity: 1
+    },
   ]
 };
 

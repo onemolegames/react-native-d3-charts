@@ -1,4 +1,4 @@
-package com.reactcativechartssample;
+package com.example;
 
 import android.app.Application;
 
