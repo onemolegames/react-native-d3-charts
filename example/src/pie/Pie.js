@@ -3,7 +3,7 @@ import Svg, {Defs, G, LinearGradient, Path, Stop} from "react-native-svg";
 import * as scale from "d3-scale";
 import * as shape from "d3-shape";
 import PropTypes from "prop-types";
-import {Dimensions, Text, View, TouchableOpacity} from "react-native";
+import {Dimensions, ScrollView, Text, TouchableOpacity, View} from "react-native";
 
 const d3 = {
   scale,
@@ -17,20 +17,16 @@ export default class PieChart extends Component {
   state = {};
 
   renderLabels() {
-    const sortedData = this.props.data.sort((first, second) => {
-      return second.value - first.value;
-    });
-
 
     return (
       <View  style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center', flexWrap: 'wrap'}}>
-        {sortedData.map((pie, index) => {
+        {this.props.data.map((pie, index) => {
           const replacedText = pie.label.text.replace(/&value/ig, pie.value);
           const rectSize = index === this.state.activePieIndex ? 13 : 10;
 
           return (<TouchableOpacity style={{flexDirection: 'row',justifyContent: 'center', alignItems: 'center'}} onPress={() => this.setActivePie(index)}>
             <View style={{width: rectSize, height: rectSize, backgroundColor: pie.startColor, margin: 10, borderRadius: rectSize / 2}}></View>
-            <Text>{replacedText}</Text>
+            <Text style={{fontWeight: 'bold', fontSize: 12}}>{replacedText}</Text>
           </TouchableOpacity>)
         })}
       </View>
@@ -52,10 +48,6 @@ export default class PieChart extends Component {
       .map((pie) => pie.value)
       .reduce((first, second) => first + second);
 
-    const sortedData = data.sort((first, second) => {
-      return second.value - first.value;
-    });
-
     const shortestEdge = size.width < size.height ? size.width : size.height;
     const radius = (shortestEdge / 2) - 40;
     const scaleValue = scale.scaleLinear()
@@ -65,7 +57,7 @@ export default class PieChart extends Component {
     let startAngle = 0;
     let reduceThickness = 0;
     let reduceXY = 10;
-    const arcs = sortedData.map((pie, index) => {
+    const arcs = this.props.data.map((pie, index) => {
       const scaledValue = scaleValue(pie.value);
       const arc = d3.shape.arc()
         .innerRadius(0)
@@ -75,22 +67,27 @@ export default class PieChart extends Component {
 
       reduceXY += reduceThickness;
       startAngle += scaledValue;
-
+      let strokeWidth = 0;
+      if (typeof this.state.activePieIndex !== 'undefined' && this.state.activePieIndex !== -1) {
+        strokeWidth =  index === this.state.activePieIndex ? 2 : 0;
+      }
       return (
         <G key={index}>
           <Path
             id={"" + (index)}
             fill={"url(#grad" + index + ")"}
+            stroke="white"
+            strokeWidth={strokeWidth}
             onPress={() => this.setActivePie(index)}
             d={arc()}/>
         </G>
       );
     });
 
-    const gradients = sortedData.map((pie, index) => {
+    const gradients = this.props.data.map((pie, index) => {
       let opacity = 1;
-      if(typeof this.state.activePieIndex !== 'undefined') {
-        opacity =  index === this.state.activePieIndex ? 1 : 0.5;
+      if (typeof this.state.activePieIndex !== 'undefined' && this.state.activePieIndex !== -1) {
+        opacity =  index === this.state.activePieIndex ? 1 : 0.2;
       }
 
       return (
@@ -102,6 +99,7 @@ export default class PieChart extends Component {
     });
     return (
       <Fragment>
+        <Text style={{fontWeight: 'bold', fontSize: 20, textAlign: 'center'}}>Browser market shares in January, 2018</Text>
         <Svg width={size.width} height={size.height} fill="none">
           <Defs>
             {gradients}
@@ -140,66 +138,66 @@ PieChart.defaultProps = {
   },
   data: [
     {
-      value: 30,
-      startColor: "#4ff07f",
-      endColor: "#4ff07f",
+      value: 61.41,
+      startColor: "#7CB5EC",
+      endColor: "#7CB5EC",
       label: {
-        text: "&value firstfirstfirst",
+        text: "Chrome",
         color: "#ff6464",
         fontSize: 12,
         fontFamily: "Helvetica"
       }
     },
     {
-      value: 20,
-      startColor: "#fd6098",
-      endColor: "#fd6098",
+      value: 11.84,
+      startColor: "#434348",
+      endColor: "#434348",
       label: {
-        text: "&value second",
+        text: "Internet Explorer",
         color: "#ff6464",
         fontSize: 12,
         fontFamily: "Helvetica"
       }
     },
     {
-      value: 20,
-      startColor: "#F2A435",
-      endColor: "#F2A435",
+      value: 10.85,
+      startColor: "#90ED7D",
+      endColor: "#90ED7D",
       label: {
-        text: "&value third",
+        text: "Firefox",
         color: "#ff6464",
         fontSize: 12,
         fontFamily: "Helvetica"
       }
     },
     {
-      value: 7,
-      startColor: "#efbef5",
-      endColor: "#efbef5",
+      value: 4.67,
+      startColor: "#F7A25D",
+      endColor: "#F7A25D",
       label: {
-        text: "&value fourth",
+        text: "Edge",
         color: "#ff6464",
         fontSize: 12,
         fontFamily: "Helvetica"
       }
     },
     {
-      value: 2,
-      startColor: "#1120f5",
-      endColor: "#1120f5",
+      value: 4.18,
+      startColor: "#8085E9",
+      endColor: "#8085E9",
       label: {
-        text: "&value fifth",
+        text: "Safari",
         color: "#ff6464",
         fontSize: 12,
         fontFamily: "Helvetica"
       }
     },
     {
-      value: 10,
-      startColor: "#F7E53B",
-      endColor: "#F7E53B",
+      value: 7.05,
+      startColor: "#F15C80",
+      endColor: "#F15C80",
       label: {
-        text: "&value sixth",
+        text: "Other",
         color: "#ff6464",
         fontSize: 12,
         fontFamily: "Helvetica"

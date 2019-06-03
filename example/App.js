@@ -18,9 +18,7 @@ export default class App extends Component<Props> {
   render() {
     return (
       <ScrollView contentContainerStyle={styles.container}>
-        <Text>Pie Chart</Text>
-        <PieChart />
-        <Text>End Pie Chart</Text>
+        <PieChart size={{height: 300, width: 300}} />
       </ScrollView>
     );
   }
