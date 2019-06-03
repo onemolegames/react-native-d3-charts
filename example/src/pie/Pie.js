@@ -1,9 +1,9 @@
-import React, {Component} from "react";
-import Svg, {Defs, G, LinearGradient, Path, Rect, Stop, Text} from "react-native-svg";
+import React, {Component, Fragment} from "react";
+import Svg, {Defs, G, LinearGradient, Path, Stop} from "react-native-svg";
 import * as scale from "d3-scale";
 import * as shape from "d3-shape";
 import PropTypes from "prop-types";
-import {Dimensions} from "react-native";
+import {Dimensions, Text, View, TouchableOpacity} from "react-native";
 
 const d3 = {
   scale,
@@ -16,28 +16,25 @@ export default class PieChart extends Component {
 
   state = {};
 
-  renderLabel(pie, index) {
-    const {size} = this.props;
+  renderLabels() {
+    const sortedData = this.props.data.sort((first, second) => {
+      return second.value - first.value;
+    });
 
-    if (!pie.label && !pie.label.text)
-      return null;
 
-    const replacedText = pie.label.text.replace(/&value/ig, pie.value);
-    const rectSize = index == this.state.activePieIndex ? 23 : 20;
     return (
-      <G>
-        <Rect
-          key={index}
-          fill={"url(#grad" + index + ")"}
-          width={rectSize}
-          height={rectSize}
-          onPress={() => this.setActivePie(index)}
-          x={size.width / 2.7}
-          y={-90 + (index * 30)}/>
-        <Text onPress={() => this.setActivePie(index)} y={-75 + (index * 30)} x={size.width / 2.7 + 30}
-              fill={pie.label.color}>{replacedText}</Text>
-      </G>
-    );
+      <View  style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center', flexWrap: 'wrap'}}>
+        {sortedData.map((pie, index) => {
+          const replacedText = pie.label.text.replace(/&value/ig, pie.value);
+          const rectSize = index === this.state.activePieIndex ? 13 : 10;
+
+          return (<TouchableOpacity style={{flexDirection: 'row',justifyContent: 'center', alignItems: 'center'}} onPress={() => this.setActivePie(index)}>
+            <View style={{width: rectSize, height: rectSize, backgroundColor: pie.startColor, margin: 10, borderRadius: rectSize / 2}}></View>
+            <Text>{replacedText}</Text>
+          </TouchableOpacity>)
+        })}
+      </View>
+    )
   }
 
   setActivePie(index) {
@@ -60,7 +57,7 @@ export default class PieChart extends Component {
     });
 
     const shortestEdge = size.width < size.height ? size.width : size.height;
-    const radius = (shortestEdge / 2.4) - 40;
+    const radius = (shortestEdge / 2) - 40;
     const scaleValue = scale.scaleLinear()
       .domain([0, totalValue])
       .range([0, (2 * Math.PI)]);
@@ -86,28 +83,35 @@ export default class PieChart extends Component {
             fill={"url(#grad" + index + ")"}
             onPress={() => this.setActivePie(index)}
             d={arc()}/>
-          {this.renderLabel(pie, index)}
         </G>
       );
     });
 
     const gradients = sortedData.map((pie, index) => {
+      let opacity = 1;
+      if(typeof this.state.activePieIndex !== 'undefined') {
+        opacity =  index === this.state.activePieIndex ? 1 : 0.5;
+      }
+
       return (
         <LinearGradient key={(index + 1) * 100} id={"grad" + index} x1="0%" x2="0%" y1="0%" y2="100%">
-          <Stop offset="0%" stopColor={pie.endColor} stopOpacity="1"/>
-          <Stop offset="100%" stopColor={pie.startColor} stopOpacity="1"/>
+          <Stop offset="0%" stopColor={pie.endColor} stopOpacity={opacity} startOpacity={opacity}/>
+          <Stop offset="100%" stopColor={pie.startColor} stopOpacity={opacity} startOpacity={opacity}/>
         </LinearGradient>
       );
     });
     return (
-      <Svg width={size.width} height={size.height} fill="none">
-        <Defs>
-          {gradients}
-        </Defs>
-        <G x={size.width / 2.7} y={size.height / 2} width="100%" height="100%">
-          {arcs}
-        </G>
-      </Svg>
+      <Fragment>
+        <Svg width={size.width} height={size.height} fill="none">
+          <Defs>
+            {gradients}
+          </Defs>
+          <G x={size.width / 2 } y={size.height / 2} width="100%" height="100%">
+            {arcs}
+          </G>
+        </Svg>
+        {this.renderLabels()}
+      </Fragment>
     );
   }
 }
@@ -132,15 +136,15 @@ PieChart.propTypes = {
 PieChart.defaultProps = {
   size: {
     width: Dimensions.get('window').width,
-    height: Dimensions.get('window').height
+    height: 320
   },
   data: [
     {
       value: 30,
       startColor: "#4ff07f",
-      endColor: "#2b3d7a",
+      endColor: "#4ff07f",
       label: {
-        text: "&value first",
+        text: "&value firstfirstfirst",
         color: "#ff6464",
         fontSize: 12,
         fontFamily: "Helvetica"
@@ -149,7 +153,7 @@ PieChart.defaultProps = {
     {
       value: 20,
       startColor: "#fd6098",
-      endColor: "#2d4c64",
+      endColor: "#fd6098",
       label: {
         text: "&value second",
         color: "#ff6464",
@@ -160,7 +164,7 @@ PieChart.defaultProps = {
     {
       value: 20,
       startColor: "#F2A435",
-      endColor: "#624119",
+      endColor: "#F2A435",
       label: {
         text: "&value third",
         color: "#ff6464",
@@ -170,8 +174,8 @@ PieChart.defaultProps = {
     },
     {
       value: 7,
-      startColor: "#4AF55D",
-      endColor: "#1b5720",
+      startColor: "#efbef5",
+      endColor: "#efbef5",
       label: {
         text: "&value fourth",
         color: "#ff6464",
@@ -182,7 +186,7 @@ PieChart.defaultProps = {
     {
       value: 2,
       startColor: "#1120f5",
-      endColor: "#06230c",
+      endColor: "#1120f5",
       label: {
         text: "&value fifth",
         color: "#ff6464",
@@ -193,7 +197,7 @@ PieChart.defaultProps = {
     {
       value: 10,
       startColor: "#F7E53B",
-      endColor: "#6f661d",
+      endColor: "#F7E53B",
       label: {
         text: "&value sixth",
         color: "#ff6464",
