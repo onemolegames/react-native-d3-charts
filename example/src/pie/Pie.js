@@ -23,10 +23,13 @@ export default class PieChart extends Component {
         {this.props.data.map((pie, index) => {
           const replacedText = pie.label.text.replace(/&value/ig, pie.value);
           const rectSize = index === this.state.activePieIndex ? 13 : 10;
-
+          let opacity = 1;
+          if (typeof this.state.activePieIndex !== 'undefined' && this.state.activePieIndex !== -1) {
+            opacity =  index === this.state.activePieIndex ? 1 : 0.4;
+          }
           return (<TouchableOpacity style={{flexDirection: 'row',justifyContent: 'center', alignItems: 'center'}} onPress={() => this.setActivePie(index)}>
-            <View style={{width: rectSize, height: rectSize, backgroundColor: pie.startColor, margin: 10, borderRadius: rectSize / 2}}></View>
-            <Text style={{fontWeight: 'bold', fontSize: 12}}>{replacedText}</Text>
+            <View style={{width: rectSize, height: rectSize, backgroundColor: pie.startColor, margin: 10, borderRadius: rectSize / 2, opacity}}></View>
+            <Text style={{fontWeight: 'bold', fontSize: 12, opacity}}>{replacedText}</Text>
           </TouchableOpacity>)
         })}
       </View>
@@ -87,7 +90,7 @@ export default class PieChart extends Component {
     const gradients = this.props.data.map((pie, index) => {
       let opacity = 1;
       if (typeof this.state.activePieIndex !== 'undefined' && this.state.activePieIndex !== -1) {
-        opacity =  index === this.state.activePieIndex ? 1 : 0.2;
+        opacity =  index === this.state.activePieIndex ? 1 : 0.4;
       }
 
       return (
