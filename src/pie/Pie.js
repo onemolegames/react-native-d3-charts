@@ -1,8 +1,9 @@
-import React from "react";
-import Svg, {G, Path, Use, Defs, LinearGradient, Stop, Text} from "react-native-svg";
+import React, {Component, Fragment} from "react";
+import Svg, {Defs, G, LinearGradient, Path, Stop} from "react-native-svg";
 import * as scale from "d3-scale";
 import * as shape from "d3-shape";
 import PropTypes from "prop-types";
+import {Dimensions, ScrollView, Text, TouchableOpacity, View} from "react-native";
 
 const d3 = {
   scale,
@@ -11,117 +12,110 @@ const d3 = {
 const {number, string, arrayOf} = PropTypes;
 const object = PropTypes.shape;
 
+export default class PieChart extends Component {
 
-const PieChart = (props) => {
-  const {size, data} = props;
+  state = {};
 
-  const totalValue = data
-    .map((pie) => pie.value)
-    .reduce((first, second) => first + second);
+  renderLabels() {
 
-  const sortedData = data.sort((first, second) => {
-    return second.value - first.value;
-  });
+    return (
+      <View  style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center', flexWrap: 'wrap'}}>
+        {this.props.data.map((pie, index) => {
+          const replacedText = pie.label.text.replace(/&value/ig, pie.value);
+          const rectSize = index === this.state.activePieIndex ? 13 : 10;
+          let opacity = 1;
+          if (typeof this.state.activePieIndex !== 'undefined' && this.state.activePieIndex !== -1) {
+            opacity =  index === this.state.activePieIndex ? 1 : 0.4;
+          }
+          return (<TouchableOpacity style={{flexDirection: 'row',justifyContent: 'center', alignItems: 'center'}} onPress={() => this.setActivePie(index)}>
+            <View style={{width: rectSize, height: rectSize, backgroundColor: pie.startColor, margin: 10, borderRadius: rectSize / 2, opacity}}></View>
+            <Text style={{fontWeight: 'bold', fontSize: 12, opacity}}>{replacedText}</Text>
+          </TouchableOpacity>)
+        })}
+      </View>
+    )
+  }
 
-  const shortestEdge = size.width < size.height ? size.width : size.height;
-  const radius = (shortestEdge / 2) - 40;
-  const scaleValue = scale.scaleLinear()
-    .domain([0, totalValue])
-    .range([0, (2 * Math.PI - 0.7)]);
+  setActivePie(index) {
+    if (this.state.activePieIndex === index) {
+      this.setState({activePieIndex: -1});
+    } else {
+      this.setState({activePieIndex: index});
+    }
+  }
 
-  const renderLabel = (pie) => {
-    if (!pie.label && !pie.label.text)
-      return null;
+  render() {
+    const {size, data} = this.props;
 
-    const replacedText = pie.label.text.replace(/&value/ig, pie.value);
-    let lines = replacedText.split("\n");
-    return lines.map((line, index) => {
-      if (index == 0) {
-        return (
-          <Text key={index}
-                fill={pie.label.color}
-                textAnchor="middle"
-                fontSize={pie.label.fontSize}
-                fontFamily={pie.label.fontFamily}>
-            {line}
-          </Text>
-        );
-      } else {
-        return (
-          <Text
-            key={index}
-            fill={pie.label.color}
+    const totalValue = data
+      .map((pie) => pie.value)
+      .reduce((first, second) => first + second);
 
-            textAnchor="middle"
-            fontSize={pie.label.fontSize}
-            fontFamily={pie.label.fontFamily}
-            x={-4}
-            y={pie.label.fontSize +4}>
-            {line}
-          </Text>
-        );
+    const shortestEdge = size.width < size.height ? size.width : size.height;
+    const radius = (shortestEdge / 2) - 40;
+    const scaleValue = scale.scaleLinear()
+      .domain([0, totalValue])
+      .range([0, (2 * Math.PI)]);
+
+    let startAngle = 0;
+    let reduceThickness = 0;
+    let reduceXY = 10;
+    const arcs = this.props.data.map((pie, index) => {
+      const scaledValue = scaleValue(pie.value);
+      const arc = d3.shape.arc()
+        .innerRadius(0)
+        .outerRadius(radius - ((this.state.activePieIndex === index ? -12 : 0)))
+        .startAngle(startAngle)
+        .endAngle(scaledValue + startAngle);
+
+      reduceXY += reduceThickness;
+      startAngle += scaledValue;
+      let strokeWidth = 0;
+      if (typeof this.state.activePieIndex !== 'undefined' && this.state.activePieIndex !== -1) {
+        strokeWidth =  index === this.state.activePieIndex ? 2 : 0;
+      }
+      return (
+        <G key={index}>
+          <Path
+            id={"" + (index)}
+            fill={"url(#grad" + index + ")"}
+            stroke="white"
+            strokeWidth={strokeWidth}
+            onPress={() => this.setActivePie(index)}
+            d={arc()}/>
+        </G>
+      );
+    });
+
+    const gradients = this.props.data.map((pie, index) => {
+      let opacity = 1;
+      if (typeof this.state.activePieIndex !== 'undefined' && this.state.activePieIndex !== -1) {
+        opacity =  index === this.state.activePieIndex ? 1 : 0.4;
       }
 
+      return (
+        <LinearGradient key={(index + 1) * 100} id={"grad" + index} x1="0%" x2="0%" y1="0%" y2="100%">
+          <Stop offset="0%" stopColor={pie.endColor} stopOpacity={opacity} startOpacity={opacity}/>
+          <Stop offset="100%" stopColor={pie.startColor} stopOpacity={opacity} startOpacity={opacity}/>
+        </LinearGradient>
+      );
     });
-  };
-
-  let startAngle = 0;
-  let reduceThickness = 6;
-  let reduceXY = 10;
-  const arcs = sortedData.map((pie, index) => {
-    const scaledValue = scaleValue(pie.value);
-    const arc = d3.shape.arc()
-      .innerRadius(radius - 80)
-      .outerRadius(radius - ((2 * index ) * reduceThickness))
-      .startAngle(startAngle)
-      .endAngle(scaledValue + startAngle);
-    let textMargin = 0;
-    if ((scaledValue + startAngle) <= (Math.PI)) {
-      textMargin = 30
-    } else {
-      textMargin = 3
-    }
-    let labelPositionX =
-      -Math.sin((startAngle + scaledValue + startAngle) / 2) * (-radius + (index - 1) * textMargin);
-    let labelPositionY =
-      Math.cos((startAngle + scaledValue + startAngle) / 2) * (-radius + (index - 1) * textMargin);
-
-    reduceXY += reduceThickness;
-    startAngle += scaledValue;
-
     return (
-      <G key={index}>
-        <Path
-          id={"" + (index)}
-          fill={"url(#grad"+ index+")"}
-          d={arc()}/>
-        <G x={labelPositionX} y={labelPositionY}>
-          {renderLabel(pie)}
-        </G>
-      </G>
+      <Fragment>
+        <Text style={{fontWeight: 'bold', fontSize: 20, textAlign: 'center'}}>Browser market shares in January, 2018</Text>
+        <Svg width={size.width} height={size.height} fill="none">
+          <Defs>
+            {gradients}
+          </Defs>
+          <G x={size.width / 2 } y={size.height / 2} width="100%" height="100%">
+            {arcs}
+          </G>
+        </Svg>
+        {this.renderLabels()}
+      </Fragment>
     );
-  });
-
-  const gradients = sortedData.map((pie, index) => {
-    return (
-      <LinearGradient key={(index+1)*100} id={"grad"+index} x1="0%" x2="0%" y1="0%" y2="100%">
-        <Stop offset="0%" stopColor={pie.endColor} stopOpacity="1"/>
-        <Stop offset="100%" stopColor={pie.startColor} stopOpacity="1"/>
-      </LinearGradient>
-    );
-  });
-
-  return (
-    <Svg width={size.width} height={size.height} fill="none">
-      <Defs>
-        {gradients}
-      </Defs>
-      <G x={size.width/2} y={size.height/2} width="100%" height="100%">
-        {arcs}
-      </G>
-    </Svg>
-  );
-};
+  }
+}
 
 PieChart.propTypes = {
   size: object({
@@ -142,71 +136,71 @@ PieChart.propTypes = {
 
 PieChart.defaultProps = {
   size: {
-    width: 320,
-    height: 380
+    width: Dimensions.get('window').width,
+    height: 320
   },
   data: [
     {
-      value: 30,
-      startColor: "#4F7EF0",
-      endColor: "#2b3d7a",
+      value: 61.41,
+      startColor: "#7CB5EC",
+      endColor: "#7CB5EC",
       label: {
-        text: "&value \n Red",
+        text: "Chrome",
         color: "#ff6464",
         fontSize: 12,
         fontFamily: "Helvetica"
       }
     },
     {
-      value: 20,
-      startColor: "#56CDFD",
-      endColor: "#2d4c64",
+      value: 11.84,
+      startColor: "#434348",
+      endColor: "#434348",
       label: {
-        text: "&value \n Red",
+        text: "Internet Explorer",
         color: "#ff6464",
         fontSize: 12,
         fontFamily: "Helvetica"
       }
     },
     {
-      value: 20,
-      startColor: "#F2A435",
-      endColor: "#624119",
+      value: 10.85,
+      startColor: "#90ED7D",
+      endColor: "#90ED7D",
       label: {
-        text: "&value \n Red",
+        text: "Firefox",
         color: "#ff6464",
         fontSize: 12,
         fontFamily: "Helvetica"
       }
     },
     {
-      value: 7,
-      startColor: "#4AF55D",
-      endColor: "#1b5720",
+      value: 4.67,
+      startColor: "#F7A25D",
+      endColor: "#F7A25D",
       label: {
-        text: "&value \n Red",
+        text: "Edge",
         color: "#ff6464",
         fontSize: 12,
         fontFamily: "Helvetica"
       }
     },
     {
-      value: 2,
-      startColor: "#1120f5",
-      endColor: "#06230c",
+      value: 4.18,
+      startColor: "#8085E9",
+      endColor: "#8085E9",
       label: {
-        text: "&value \n Red",
+        text: "Safari",
         color: "#ff6464",
         fontSize: 12,
         fontFamily: "Helvetica"
       }
     },
     {
-      value: 10,
-      startColor: "#F7E53B",
-      endColor: "#6f661d",
+      value: 7.05,
+      startColor: "#F15C80",
+      endColor: "#F15C80",
       label: {
-        text: "&value \n",
+        text: "Other",
         color: "#ff6464",
         fontSize: 12,
         fontFamily: "Helvetica"
@@ -214,5 +208,3 @@ PieChart.defaultProps = {
     }
   ]
 };
-
-export default PieChart;
