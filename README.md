@@ -13,11 +13,11 @@ npm install react-native-d3-charts --save
 react-native link react-native-svg
 ```
 
-##Usage & Options
+## Usage & Options
 
-###Line Chart
+### Line Chart
 
-####Options: 
+#### Options: 
 
 | Prop | Type | Default | Definition |
 |-----|--------|----|-------|
@@ -25,7 +25,7 @@ react-native link react-native-svg
 | data |array<object>| [<Browser usage statistics>]| the data object explained below  |
 | showLegend |bool| true | a flag to show/hide the legend of the chart  |
 
-#####The structure of the data object:
+##### The structure of the data object:
 
 | Prop | Type | Default | Definition |
 |-----|--------|----|-------|
@@ -35,7 +35,7 @@ react-native link react-native-svg
 | label | string | - | the definition/label of the data  |
 | labelStyle | object | {} | style object for the label  |
 
-#####Example:
+##### Example:
 
 ````javascript
 
