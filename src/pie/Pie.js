@@ -21,7 +21,6 @@ export default class PieChart extends Component {
     return (
       <View  style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center', flexWrap: 'wrap'}}>
         {this.props.data.map((pie, index) => {
-          const replacedText = pie.label.text.replace(/&value/ig, pie.value);
           const rectSize = index === this.state.activePieIndex ? 13 : 10;
           let opacity = 1;
           if (typeof this.state.activePieIndex !== 'undefined' && this.state.activePieIndex !== -1) {
@@ -29,7 +28,7 @@ export default class PieChart extends Component {
           }
           return (<TouchableOpacity style={{flexDirection: 'row',justifyContent: 'center', alignItems: 'center'}} onPress={() => this.setActivePie(index)}>
             <View style={{width: rectSize, height: rectSize, backgroundColor: pie.startColor, margin: 10, borderRadius: rectSize / 2, opacity}}></View>
-            <Text style={{fontWeight: 'bold', fontSize: 12, opacity}}>{replacedText}</Text>
+            <Text style={{fontWeight: 'bold', fontSize: 12, opacity, ...pie.label.style}}>{pie.label}</Text>
           </TouchableOpacity>)
         })}
       </View>
@@ -144,67 +143,43 @@ PieChart.defaultProps = {
       value: 61.41,
       startColor: "#7CB5EC",
       endColor: "#7CB5EC",
-      label: {
-        text: "Chrome",
-        color: "#ff6464",
-        fontSize: 12,
-        fontFamily: "Helvetica"
-      }
+      label: "Chrome",
+      labelStyle: {},
     },
     {
       value: 11.84,
       startColor: "#434348",
       endColor: "#434348",
-      label: {
-        text: "Internet Explorer",
-        color: "#ff6464",
-        fontSize: 12,
-        fontFamily: "Helvetica"
-      }
+      label: "Internet Explorer",
+      labelStyle: {},
     },
     {
       value: 10.85,
       startColor: "#90ED7D",
       endColor: "#90ED7D",
-      label: {
-        text: "Firefox",
-        color: "#ff6464",
-        fontSize: 12,
-        fontFamily: "Helvetica"
-      }
+      label: "Firefox",
+      labelStyle: {},
     },
     {
       value: 4.67,
       startColor: "#F7A25D",
       endColor: "#F7A25D",
-      label: {
-        text: "Edge",
-        color: "#ff6464",
-        fontSize: 12,
-        fontFamily: "Helvetica"
-      }
+      label: "Edge",
+      labelStyle: {},
     },
     {
       value: 4.18,
       startColor: "#8085E9",
       endColor: "#8085E9",
-      label: {
-        text: "Safari",
-        color: "#ff6464",
-        fontSize: 12,
-        fontFamily: "Helvetica"
-      }
+      label: "Safari",
+      labelStyle: {},
     },
     {
       value: 7.05,
       startColor: "#F15C80",
       endColor: "#F15C80",
-      label: {
-        text: "Other",
-        color: "#ff6464",
-        fontSize: 12,
-        fontFamily: "Helvetica"
-      }
+      label: "Other",
+      labelStyle: {},
     }
   ]
 };
