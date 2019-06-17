@@ -21,18 +21,19 @@ react-native link react-native-svg
 
 | Prop | Type | Default | Definition |
 |-----|--------|----|-------|
-| `size` | `object` | `{width: <Device Width>,height: 320}` | width and height of the chart |
-| `data` |`array<object>`| [<Browser usage statistics>]| the data object explained below  |
-| `showLegend` |`bool`| true | a flag to show/hide the legend of the chart  |
+| size | object | {width: <Device Width>,height: 320} | width and height of the chart |
+| data |array<object>| [<Browser usage statistics>]| the data object explained below  |
+| showLegend |bool| true | a flag to show/hide the legend of the chart  |
 
 #####The structure of the data object:
+
 | Prop | Type | Default | Definition |
 |-----|--------|----|-------|
-| `value` | `number` | - | the value of the data object |
-| `startColor` |`string`| - | the start color of the gradient for the related data   |
-| `endColor` |`string`| - | the end color of the gradient for the related data |
-| `label` |`string`| - | the definition/label of the data  |
-| `labelStyle` |`object`| {} | style object for the label  |
+| value | number | - | the value of the data object |
+| startColor | string| - | the start color of the gradient for the related data   |
+| endColor | string | - | the end color of the gradient for the related data |
+| label | string | - | the definition/label of the data  |
+| labelStyle | object | {} | style object for the label  |
 
 #####Example:
 
