@@ -14,8 +14,11 @@ react-native link react-native-svg
 ```
 
 ##Usage & Options
+
 ###Line Chart
+
 ####Options: 
+
 | Prop | Type | Default | Definition |
 |-----|--------|----|-------|
 | `size` | `object` | `{width: <Device Width>,height: 320}` | width and height of the chart |
@@ -32,6 +35,7 @@ react-native link react-native-svg
 | `labelStyle` |`object`| {} | style object for the label  |
 
 #####Example:
+
 ````javascript
 
 import React, {Component} from 'react';
