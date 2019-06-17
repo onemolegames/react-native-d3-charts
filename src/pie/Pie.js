@@ -9,7 +9,7 @@ const d3 = {
   scale,
   shape,
 };
-const {number, string, arrayOf} = PropTypes;
+const {number, string, arrayOf, boolean} = PropTypes;
 const object = PropTypes.shape;
 
 export default class PieChart extends Component {
@@ -44,7 +44,7 @@ export default class PieChart extends Component {
   }
 
   render() {
-    const {size, data} = this.props;
+    const {size, data, showLegend} = this.props;
 
     const totalValue = data
       .map((pie) => pie.value)
@@ -110,7 +110,7 @@ export default class PieChart extends Component {
             {arcs}
           </G>
         </Svg>
-        {this.renderLabels()}
+        {showLegend && this.renderLabels()}
       </Fragment>
     );
   }
@@ -121,6 +121,7 @@ PieChart.propTypes = {
     width: number.isRequired,
     height: number.isRequired
   }).isRequired,
+  showLegend: boolean,
   data: arrayOf(object({
     value: number.isRequired,
     color: string,
@@ -138,6 +139,7 @@ PieChart.defaultProps = {
     width: Dimensions.get('window').width,
     height: 320
   },
+  showLegend: true,
   data: [
     {
       value: 61.41,
