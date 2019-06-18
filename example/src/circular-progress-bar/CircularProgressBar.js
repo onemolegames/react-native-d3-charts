@@ -105,15 +105,10 @@ const CircularProgressBar = (props) => {
             strokeLinejoin="round"
             d={valueArc()}/>
         </G>
-        <Text x={width / 2 - 5} y={(height / 2) + (2 * thickestArc) - fontSize}
-              textAnchor="middle"
-              fontSize={fontSize}
-              fontFamily={fontFamily}
-              stroke={color}
-              fill={color}>
-          {formattedLabel}
-        </Text>
       </Svg>
+      <RNText style={{position: 'relative', top: -height / 2, fontSize:20, fontWeight: 'bold'}}>
+        {formattedLabel}
+      </RNText>
     </Fragment>
   );
 };
@@ -131,7 +126,6 @@ CircularProgressBar.propTypes = {
   }),
   valueArc: object({
     arcWidth: number,
-    arcOpacity: number,
     arcStartColor: string,
     arcStopColor: string
   }),
