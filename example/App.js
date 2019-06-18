@@ -7,10 +7,9 @@
  */
 
 import React, {Component} from 'react';
-import {StyleSheet, ScrollView, Text} from 'react-native';
+import {StyleSheet, ScrollView, View} from 'react-native';
 import PieChart from "./src/pie/Pie";
 import CircularProgressBar from "./src/circular-progress-bar/CircularProgressBar";
-import LineChart from "./src/line/Line";
 
 
 type Props = {};
@@ -19,7 +18,9 @@ export default class App extends Component<Props> {
     return (
       <ScrollView contentContainerStyle={styles.container}>
         <PieChart size={{height: 300, width: 300}} />
-      </ScrollView>
+        <View style={{height:40}}></View>
+        <CircularProgressBar />
+       </ScrollView>
     );
   }
 }

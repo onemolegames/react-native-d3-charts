@@ -1,8 +1,9 @@
-import React from "react";
+import React, {Fragment} from "react";
 import PropTypes from "prop-types";
-import Svg, {G, LinearGradient, Path, Defs, Stop, Text} from "react-native-svg";
+import Svg, {Defs, G, LinearGradient, Path, Stop, Text} from "react-native-svg";
 import * as scale from "d3-scale";
 import * as shape from "d3-shape";
+import {Dimensions, Text as RNText} from "react-native";
 
 const d3 = {
   scale,
@@ -80,37 +81,40 @@ const CircularProgressBar = (props) => {
   }
 
   return (
-    <Svg width={width} height={height} fill="none">
-      <Defs>
-        <LinearGradient id="grad" x1="0%" x2="0%" y1="0%" y2="100%">
-          <Stop offset="0%" stopColor={valueArcStartColor} stopOpacity="1"/>
-          <Stop offset="100%" stopColor={valueArcStopColor} stopOpacity="1"/>
-        </LinearGradient>
-      </Defs>
-      <G x={width/2} y={height/2} width="100%" height="100%">
-        {dashedArc}
-        <Path stroke={baseArcColor}
-              strokeWidth={baseArcWidth}
-              strokeOpacity={baseArcOpacity}
-              d={baseArc()}>
-        </Path>
-        <Path
-          stroke="url(#grad)"
-          strokeWidth={valueArcWidth}
-          strokeOpacity={valueArcOpacity}
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          d={valueArc()}/>
-      </G>
-      <Text x={width / 2 - 5} y={(height / 2) + (2 * thickestArc) - fontSize}
-            textAnchor="middle"
-            fontSize={fontSize}
-            fontFamily={fontFamily}
-            stroke={color}
-            fill={color}>
-        {formattedLabel}
-      </Text>
-    </Svg>
+    <Fragment>
+      <RNText style={{fontWeight: 'bold', fontSize: 20, textAlign: 'center'}}>{props.title}</RNText>
+      <Svg width={width} height={height} fill="none">
+        <Defs>
+          <LinearGradient id="grad" x1="0%" x2="0%" y1="0%" y2="100%">
+            <Stop offset="0%" stopColor={valueArcStartColor} stopOpacity="1"/>
+            <Stop offset="100%" stopColor={valueArcStopColor} stopOpacity="1"/>
+          </LinearGradient>
+        </Defs>
+        <G x={width / 2} y={height / 2} width="100%" height="100%">
+          {dashedArc}
+          <Path stroke={baseArcColor}
+                strokeWidth={baseArcWidth}
+                strokeOpacity={baseArcOpacity}
+                d={baseArc()}>
+          </Path>
+          <Path
+            stroke="url(#grad)"
+            strokeWidth={valueArcWidth}
+            strokeOpacity={valueArcOpacity}
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            d={valueArc()}/>
+        </G>
+        <Text x={width / 2 - 5} y={(height / 2) + (2 * thickestArc) - fontSize}
+              textAnchor="middle"
+              fontSize={fontSize}
+              fontFamily={fontFamily}
+              stroke={color}
+              fill={color}>
+          {formattedLabel}
+        </Text>
+      </Svg>
+    </Fragment>
   );
 };
 
@@ -120,6 +124,7 @@ CircularProgressBar.propTypes = {
     height: number.isRequired
   }).isRequired,
   value: number.isRequired,
+  title: string,
   valueRange: object({
     max: number.isRequired,
     min: number.isRequired,
@@ -151,23 +156,24 @@ CircularProgressBar.propTypes = {
 
 CircularProgressBar.defaultProps = {
   size: {
-    width: 320,
+    width: Dimensions.get('window').width,
     height: 320
   },
   value: 47,
+  title: "Today's Avarage",
   showDashedArc: true,
   valueRange: {
     max: 100,
     min: 0
   },
   valueArc: {
-    arcWidth: 8,
+    arcWidth: 18,
     arcOpacity: 1,
-    arcStartColor: "#f6eb12",
+    arcStartColor: "#5f96f6",
     arcStopColor: "#1a4de6"
   },
   baseArc: {
-    arcWidth: 3,
+    arcWidth: 8,
     arcOpacity: 0.1,
     arcColor: "#53c4f5"
   },
@@ -178,7 +184,7 @@ CircularProgressBar.defaultProps = {
   },
   label: {
     text: "&value%",
-    fontSize: 20,
+    fontSize: 30,
     fontFamily: "Helvetica",
     color: "black"
   }

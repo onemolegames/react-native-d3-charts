@@ -24,6 +24,7 @@ react-native link react-native-svg
 | size | object | {width: <Device Width>,height: 320} | width and height of the chart |
 | data |array<object>| [<Browser usage statistics>]| the data object explained below  |
 | showLegend |bool| true | a flag to show/hide the legend of the chart  |
+| title |string| '' | the title of the chart  |
 
 ##### The structure of the data object:
 
@@ -97,7 +98,10 @@ export default class App extends Component<Props> {
   render() {
     return (
       <ScrollView contentContainerStyle={styles.container}>
-        <PieChart size={{height: 300, width: 300}} data={this.state.chartData} />
+        <PieChart 
+          size={{height: 300, width: 300}} 
+          data={this.state.chartData} 
+          title="Browser market shares in January, 2018" />
       </ScrollView>
     );
   }
