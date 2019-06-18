@@ -4,7 +4,7 @@
   "description": "Cross platform react native charting library built with d3js and react-native-svg",
   "repository": {
     "type": "git",
-    "url": "https://github.com/onemolegames/react-native-d3-charts.git"
+    "url": "git+https://github.com/onemolegames/react-native-d3-charts.git"
   },
   "main": "src/index.js",
   "scripts": {
@@ -23,21 +23,11 @@
     "ios",
     "android"
   ],
-  "author": {
-    "name": "Semir Turgay",
-    "email": "semir.turgayh@gmail.com",
-    "url": "https://github.com/semirturgay"
-  },
+  "author": "Semir Turgay <semir.turgayh@gmail.com> (https://github.com/semirturgay)",
   "license": "MIT",
   "maintainers": [
-    {
-      "name": "semirturgay",
-      "email": "semir.turgay@gmail.com"
-    },
-    {
-      "name": "yasemincidem",
-      "email": "yasemincidem@gmail.com"
-    }
+    "semirturgay <semir.turgay@gmail.com>",
+    "yasemincidem <yasemincidem@gmail.com>"
   ],
   "dependencies": {
     "babel-polyfill": "^6.23.0",
@@ -67,5 +57,12 @@
     "modulePathIgnorePatterns": [
       "<rootDir>/example"
     ]
+  },
+  "bugs": {
+    "url": "https://github.com/onemolegames/react-native-d3-charts/issues"
+  },
+  "homepage": "https://github.com/onemolegames/react-native-d3-charts#readme",
+  "directories": {
+    "example": "example"
   }
 }
