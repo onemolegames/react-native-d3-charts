@@ -1,6 +1,6 @@
 import React, {Fragment} from "react";
 import PropTypes from "prop-types";
-import Svg, {Defs, G, LinearGradient, Path, Stop, Text} from "react-native-svg";
+import Svg, {Defs, G, LinearGradient, Path, Stop} from "react-native-svg";
 import * as scale from "d3-scale";
 import * as shape from "d3-shape";
 import {Dimensions, Text as RNText} from "react-native";
@@ -16,9 +16,7 @@ const CircularProgressBar = (props) => {
 
   const {
     text,
-    fontSize,
-    fontFamily,
-    color,
+    style,
   } = props.label;
 
   const {width, height} = props.size;
@@ -83,7 +81,7 @@ const CircularProgressBar = (props) => {
   return (
     <Fragment>
       <RNText style={{fontWeight: 'bold', fontSize: 20, textAlign: 'center'}}>{props.title}</RNText>
-      <Svg width={width} height={height} fill="none">
+      <Svg width={width} height={height} fill="red">
         <Defs>
           <LinearGradient id="grad" x1="0%" x2="0%" y1="0%" y2="100%">
             <Stop offset="0%" stopColor={valueArcStartColor} stopOpacity="1"/>
@@ -106,7 +104,12 @@ const CircularProgressBar = (props) => {
             d={valueArc()}/>
         </G>
       </Svg>
-      <RNText style={{position: 'relative', top: -height / 2, fontSize:20, fontWeight: 'bold'}}>
+      <RNText style={{
+        position: 'relative',
+        fontSize: 40,
+        fontWeight: 'bold', ...style,
+        top: -height / 2 - (style.fontSize ? style.fontSize / 2 : 20),
+      }}>
         {formattedLabel}
       </RNText>
     </Fragment>
@@ -178,9 +181,9 @@ CircularProgressBar.defaultProps = {
   },
   label: {
     text: "&value%",
-    fontSize: 30,
-    fontFamily: "Helvetica",
-    color: "black"
+    style: {
+      fontSize: 60
+    }
   }
 };
 

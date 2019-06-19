@@ -3,7 +3,7 @@ import Svg, {Defs, G, LinearGradient, Path, Stop} from "react-native-svg";
 import * as scale from "d3-scale";
 import * as shape from "d3-shape";
 import PropTypes from "prop-types";
-import {Dimensions, Text, TouchableOpacity, View} from "react-native";
+import {Dimensions, ScrollView, Text, TouchableOpacity, View} from "react-native";
 
 const d3 = {
   scale,
@@ -44,7 +44,7 @@ export default class PieChart extends Component {
   }
 
   render() {
-    const {size, data, showLegend, title} = this.props;
+    const {size, data, showLegend} = this.props;
 
     const totalValue = data
       .map((pie) => pie.value)
@@ -101,7 +101,7 @@ export default class PieChart extends Component {
     });
     return (
       <Fragment>
-        <Text style={{fontWeight: 'bold', fontSize: 20, textAlign: 'center'}}>{title}</Text>
+        <Text style={{fontWeight: 'bold', fontSize: 20, textAlign: 'center'}}>Browser market shares in January, 2018</Text>
         <Svg width={size.width} height={size.height} fill="none">
           <Defs>
             {gradients}
@@ -122,7 +122,6 @@ PieChart.propTypes = {
     height: number.isRequired
   }).isRequired,
   showLegend: boolean,
-  title: string,
   data: arrayOf(object({
     value: number.isRequired,
     color: string,
@@ -141,7 +140,6 @@ PieChart.defaultProps = {
     height: 320
   },
   showLegend: true,
-  title: 'Browser market shares in January, 2018',
   data: [
     {
       value: 61.41,
