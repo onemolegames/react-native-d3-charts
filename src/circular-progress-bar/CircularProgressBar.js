@@ -157,7 +157,7 @@ CircularProgressBar.defaultProps = {
     height: 320
   },
   value: 47,
-  title: "Today's Avarage",
+  title: "",
   showDashedArc: true,
   valueRange: {
     max: 100,
@@ -182,7 +182,7 @@ CircularProgressBar.defaultProps = {
   label: {
     text: "&value%",
     style: {
-      fontSize: 60
+      fontSize: 40
     }
   }
 };

@@ -15,7 +15,7 @@ react-native link react-native-svg
 
 ## Usage & Options
 
-### Line Chart
+### Pie Chart
 
 #### Options: 
 
@@ -127,6 +127,18 @@ const styles = StyleSheet.create({
 });
 
 ````
+
+### Circular Progress Bar
+
+#### Options: 
+| Prop | Type | Default | Definition |
+|-----|--------|----|-------|
+| size | object | {width: <Device Width>,height: 320} | width and height of the chart |
+| title |string| '' | the title of the chart  |
+| value |number | 47 | the value of the progress  |
+| valueRange |object| { max: 100, min: 0} | defines the range for the value  |
+| showDashedArc |bool| true | a flag to show/hide the dashed arc with value  |
+
 
 
 ## For running the example application
